@@ -1,0 +1,201 @@
+{% extends "layouts/base-fullscreen.html" %}
+{% load custom_filters %}
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+            <div>
+                <!-- <a href="{% url 'agent_client_add' %}" class="btn btn-secondary ml-10" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="fas fa-plus mr-2"></span>Add
+                </a> -->
+            <a class="btn btn-primary"style="margin-right: 20px" href="{% url 'agent_client_add' %}">Add Client</a>
+            </div>
+
+    <div>
+                 <form id="exceluploadform" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+            <div class="x_content input-group text-center" >
+
+                <input type="file" name="file" class="form-control" required>
+                <button type="submit" class="btn btn-primary"style="margin-right: 20px">Import Excel</button>
+                <button type="submit" class="btn btn-primary"style="margin-right: 20px">
+                    <a href="{% url 'download_excelfile' %}"></a>Download Template</button>
+                <br/>
+            </div>
+  </form>
+
+
+                <div class="form-file mb-3 " style="display:none">
+                    <input type="file" class="" id="customFile">
+                    <label class="form-file-label" for="customFile">
+                        <span class="form-file-text">Choose file...</span>
+                        <span class="form-file-button">Browse</span>
+                    </label>
+                </div>
+            </div>
+
+        </div>
+<div class="col">
+    <div class="card card-body">
+        <form method="get">
+            {{ agent_filter.form }}
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+    </div>
+</div>
+<div class="card">
+          <div class="card-body">
+              <div class="table-responsive">
+                  <table class="table table-centered table-nowrap mb-0 rounded">
+                      <thead class="thead-light">
+                          <tr>
+                              <th class="border-0">#</th>
+                              <th class="border-0">Appointment Scheduled</th>
+                              <th class="border-0">Product</th>
+                              <th class="border-0">Name</th>
+                              <th class="border-0">Surname</th>
+                              <th class="border-0">Gender</th>
+                              <th class="border-0">Phone Number</th>
+                              <th class="border-0">Age</th>
+                              <th class="border-0">Source</th>
+                              <th class="border-0">Tags</th>
+                              <th class="border-0" colspan="3">Remarks</th>
+                              <th class="border-0">Download Event</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <!-- Item -->
+                          {%for data in agent_data %}
+                          <tr>
+
+                              <td class="border-0">{{forloop.counter}} </td>
+                            <!--  <td class="border-0 font-weight-bold"><span class="icon icon-xs icon-gray w-30"><span class="fas fa-globe-europe"></span></span>
+                                  <input type="datetime-local" id="birthdaytime" name="birthdaytime" value="{{data.appointment_scheduled}}">{{data.appointment_scheduled}}</td>-->
+                              <td class="border-0" id="date" value="{{data.id}}">
+                              <input type="datetime-local" id="client" name="appointment_scheduled" value="{{data.appointment_scheduled|date:'Y-m-d'}}T{{data.appointment_scheduled.time|date:'H:i'}}" />
+                              </td>
+                              
+                              <td class="border-0">
+                                  {{data.product}}
+                              </td>
+                              <td class="border-0">
+                                  {{data.name}}
+                              </td>
+                              <td class="border-0">
+                                  {{data.surname}}
+                              </td>
+                              <td class="border-0">
+                                  {{data.gender}}
+                              </td>
+                              <td class="border-0">
+                                  {{data.phone_number}} <a href="tel:+{{ data.phone_number }}"><img src="/static/assets/img/icons/call.png" width="20px" height="20px" alt="Call"></a> <a href="https://api.whatsapp.com/send/?phone={{ data.phone_number }}&text&app_absent=0" target="_blank"><img src="/static/assets/img/icons/whatsapp.png" width="20px" height="20px" alt="Whatsapp"></a>
+                              </td>
+                              <td class="border-0">
+                                  {{data.age}}
+                              </td>
+                              <td class="border-0">
+                                  {{data.source}}
+                              </td>
+                              <td class="border-0" style="width:200px">
+                                  <select class="form-select tag_selected" aria-label="Default select example" style="width:200px">
+                                      {% for tag in agent_tags %}
+                                        <option {% if data.tag == tag %} selected {% endif %} value="{{data.id}}">{{tag|trim}}</option>
+                                      {%endfor%}
+                                    </select>
+                              </td>
+                              <td class="border-0" style="width:200px" rows=1 colspan=3>
+                                  <textarea class="form-control client_remarks" data-clientid = {{data.id}} style="width:200px"  id="exampleFormControlTextarea1" >{{ data.remarks }}</textarea>
+                              </td>
+                              <td class="border-0" style="width:200px" rows=1 colspan=3>
+                                <a class="btn btn-primary" href="{% url 'download_event' data.id %}">Download</a>
+                              </td>
+
+
+                          </tr>
+                          {%endfor%}
+                          <!-- End of Item -->
+
+
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+<script>
+    $("#importbtn").click(function(e){
+        $("#customFile").click();
+    });
+
+    $('.tag_selected').on('change', function() {
+        var selected_tag = $(this).find(":selected").text();
+        var client_id = $(this).find(":selected").val();
+        var tag_change_fn = true
+          $.ajax({
+             headers: {'X-CSRFToken': '{{csrf_token}}'},
+             url: '{% url "agent_client" %}',
+             data : {"selected_tag":selected_tag,"client_id":client_id,"tag_change_fn":tag_change_fn},
+             type: "GET",
+             dataType: 'json',
+            success: function(data){
+                console.log(data.success);
+            },
+            error: function(data){
+              alert('error; '+ eval(error));
+            }
+          });
+           return false;
+        });
+    $('.client_remarks').on('focusout', function(e) {
+        e.preventDefault();
+        var client_remarks = $(this).val();
+        var client_id = $(this).data("clientid");
+          $.ajax({
+             headers: {'X-CSRFToken': '{{csrf_token}}'},
+             url: '{% url "agent_client" %}',
+             data : {"client_remarks":client_remarks,"client_id":client_id},
+             type: "GET",
+             dataType: 'json',
+            success: function(data){
+                console.log(data.success);
+            },
+            error: function(data){
+              alert('error; '+ eval(error));
+            }
+          });
+           return false;
+    })
+</script>
+<script>
+      $('#client').on('focusout', function() {
+        var client_date = $("#client").val();
+        var client_id=$("#date").attr('value');
+          $.ajax({
+             headers: {'X-CSRFToken': '{{csrf_token}}'},
+             url: '{% url "ajax_date" %}',
+             data : {"client_id":client_id,
+                     "client_date":client_date},
+             type: "POST",
+            success: function(data){
+                console.log(data.success);
+            },
+
+          });
+           return false;
+        });
+</script>
+{% endblock javascripts %}

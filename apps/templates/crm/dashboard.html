@@ -1,0 +1,97 @@
+{% extends 'layouts/base-fullscreen.html' %}
+{% load custom_filters %}
+{% block title %} Dashboard {% endblock title %}
+
+{% block content %}  	
+<div class="head">
+  <h3>New Leads</h3>
+  <h3>Contacted Leads</h3>
+  <h3>completed Leads</h3>
+</div>
+<div class="wrapper">
+  <div class="coll-1">
+    {% for data in l_pages %}
+    <a href="{% url 'lead' %}?data={{data.id}}">
+      <div class="card1">
+        <h4>New Lead</h4>
+        <p>{{ data.phone_number }} </p>
+        <p>Scheduled at: <span id="appdate">{{ data.appointment_scheduled }}</span></p>
+      </div>
+    </a>
+    {% endfor %}
+    <div class="pagination">
+      <span class="step-links">
+          {% if l_pages.has_previous %}
+              <a  class="btn btn-outline-info mb-4" href="?page=1">&laquo; </a>
+              <a class="btn btn-outline-info mb-4" href="?page={{ l_pages.previous_page_number }}"> &lt; </a>
+          {% endif %}
+          {% for num in l_pages.paginator.page_range %}
+              {% if l_pages.number == num %}
+                  <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                  {% elif num > l_pages.number|add:'-3' and num < l_pages.number|add:'3' %}
+                  <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+              {% endif %}
+          {% endfor %}
+  
+          {% if l_pages.has_next %}
+              <a class="btn btn-outline-info mb-4" href="?page={{ l_pages.next_page_number }}"> &gt; </a>
+              <a class="btn btn-outline-info mb-4" href="?page={{ l_pages.paginator.num_pages }}"> &raquo;</a>
+          {% endif %}
+      </span>
+  </div>
+  </div>
+  
+  <div class="coll-2">
+    <div class="card2">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo ratione
+      iste ullam, architecto aut animi? Rerum facere eius, asperiores
+      molestias sit saepe aliquid obcaecati ducimus libero cumque molestiae
+      exercitationem deleniti.
+    </div>
+    <div class="card2">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo ratione
+      iste ullam, architecto aut animi? Rerum facere eius, asperiores
+      molestias sit saepe aliquid obcaecati ducimus libero cumque molestiae
+      exercitationem deleniti.
+    </div>
+    <div class="card2">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo ratione
+      iste ullam, architecto aut animi? Rerum facere eius, asperiores
+      molestias sit saepe aliquid obcaecati ducimus libero cumque molestiae
+      exercitationem deleniti.
+    </div>
+    <div class="card2">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo ratione
+      iste ullam, architecto aut animi? Rerum facere eius, asperiores
+      molestias sit saepe aliquid obcaecati ducimus libero cumque molestiae
+      exercitationem deleniti.
+    </div>
+  </div>
+  <div class="coll-3">
+    <div class="card3">
+      <h3>head-3</h3>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur
+      laboriosam tenetur ad beatae sunt dolore, in soluta necessitatibus
+      sequi maxime?
+    </div>
+    <div class="card3">
+      <h3>head-3</h3>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur
+      laboriosam tenetur ad beatae sunt dolore, in soluta necessitatibus
+      sequi maxime?
+    </div>
+    <div class="card3">
+      <h3>head-3</h3>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur
+      laboriosam tenetur ad beatae sunt dolore, in soluta necessitatibus
+      sequi maxime?
+    </div>
+    <div class="card3">
+      <h3>head-3</h3>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur
+      laboriosam tenetur ad beatae sunt dolore, in soluta necessitatibus
+      sequi maxime?
+    </div>
+  </div>
+</div>
+{% endblock content %}

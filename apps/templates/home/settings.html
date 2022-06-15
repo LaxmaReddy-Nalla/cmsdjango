@@ -1,0 +1,73 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Settings {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 card-body">
+    </div>
+    <div class="col-12 card-body">
+    </div>    
+    <div class="col-12 card-body">
+    </div>    
+    <div class="col-12 card-body">
+    </div>
+    <div class="card-body col-md-1"></div>
+    <div class="card col-md-5">
+        <div class="card-body">
+            <h5 class="card-title">General information</h5>
+        <form method="post" class="row g-3">
+                {% csrf_token %}
+            <div class="col-md-6">
+                <label for="id_first_name" class="form-label">First Name</label>
+                <input id="id_first_name" value="{{request.user.first_name}}" name="first_name" type="text" class="form-control" placeholder="Enter your first name" required>
+            </div>
+            <div class="col-md-6">
+                <label for="id_last_name" class="form-label">Last Name</label>
+                <input type="text" class="form-control" value="{{ request.user.last_name }}" name="last_name" id="id_last_name" placeholder="Also your last name" required>
+            </div>
+            <div class="col-md-6">
+                <label for="id_email" class="form-label">Email</label>
+                <input type="email" class="form-control" value="{{ request.user.email }}" name="email" id="id_email" readonly>
+            </div>
+            <div class="col-md-6">
+                <label for="id_phone_number" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" value="{{ request.user.profile.phone_number }}" name="phone_number" id="id_phone_number" placeholder="+1(913)0001234" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="id_insurance_company" class="form-label">Insurance company name</label>
+                <input type="text" class="form-control" value="{{ request.user.profile.insurance_company }}" id="id_insurance_company" name="insurance_company" placeholder="Company Name" required>
+            </div>
+            <div class="col-md-6">
+                <label for="id_insurance_license_number" class="form-label">License Number</label>
+                <input type="text" class="form-control" value="{{ request.user.profile.insurance_license_number }}" name="insurance_license_number" id="id_insurance_license_number" placeholder="1234" required>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+        </div>
+    </div>
+    <div class="col-sm-2">
+    </div>
+    
+    <div class=" col-sm-3 row-3 text-center p-0" >
+        <div class="card-body">
+            <h4 class="h3">
+                {{ request.user.get_full_name }}
+            </h4>
+            <h4>
+                {{ request.user.username }}
+            </h4>
+            <h5>
+                {{ request.user.email }}
+            </h5>
+        </div>
+    </div></div>
+</div>
+{% endblock content %}
+{% block javascripts %}{% endblock javascripts %}

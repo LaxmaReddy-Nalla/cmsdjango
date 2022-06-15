@@ -1,0 +1,176 @@
+	
+<section class="section dashboard">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row">
+          <!-- Month call count start --->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card sales-card">
+              <div class="card-body">
+                <h5 class="card-title">Calls <span>| This Month</span></h5>
+
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-lightning"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>{{ count }}</h6>
+                    <!-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!--- Calls Done in a month  --->
+          <!-- Month leads Start --->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card revenue-card">
+              <div class="card-body">
+                <h5 class="card-title">Leads <span>| This Month</span></h5>
+
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-people"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>#{{ leads }}</h6>
+                    <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!--- month Leads end --->
+          <!-- Available calls start -->
+          <div class="col-xxl-4 col-xl-12">
+
+            <div class="card info-card customers-card">
+              <div class="card-body">
+                <h5 class="card-title">Available Calls <span>| This Month</span></h5>
+
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-lightning-fill"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>{{ available_calls }}</h6>
+                    <!-- <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span> -->
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+          <!-- Available calls End --->
+
+<!-- End today Leads -->
+                    <!-- Todays leads -->
+                    <div class="col-12">
+                      <div class="card recent-sales overflow-auto">
+                        <div class="card-body">
+                          <h5 class="card-title">Leads <span>| Today</span></h5>
+          
+                          <table class="table table-borderless">
+                            <thead>
+                              <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Gender</th>
+                                <th scope="col">Phone Number</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">Appointment Scheduled </th>
+                                <th scope="col">Last Contacted</th>
+                                <th scope="col">Pickup Timing</th>
+                                <th scope="col">Lead qualification</th>
+                                <th scope="col">Topic</th>
+                                <th scope="col">Tags</th>
+                                <th scope="col">Call Back notes</th>
+                                <!-- <th scope="col">Tag</th> -->
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for data in l_pages %}
+                              <tr>
+                                <td class="border-0">
+                                  {{data.name}}
+                                </td>
+                                <td class="border-0">
+                                  {{data.gender}}
+                                </td>
+                                <td class="border-0">
+                                  {{data.phone_number}} <a href="tel:+{{ data.phone_number }}"><img src="/static/assets/img/icons/call.png" width="20px" height="20px" alt="Call"></a> <a href="https://api.whatsapp.com/send/?phone={{ data.phone_number }}&text&app_absent=0" target="_blank"><img src="/static/assets/img/icons/whatsapp.png" width="20px" height="20px" alt="Whatsapp"></a>
+                                </td>
+                                <td class="border-0">
+                                  {{data.age}}
+                                </td>
+                                <td class="border-0" id="date" value="{{data.id}}">
+                                  <input type="datetime-local" id="client" name="appointment_scheduled" value="{% load tz %}{{data.appointment_scheduled|timezone:"Asia/Singapore"|date:'Y-m-d'}}T{{data.appointment_scheduled.time|timezone:"Asia/Singapore"|date:'H:i'}}" />
+                                </td>
+                                <td class="border-0"> 
+                                  {% load tz %}
+                                  {{ data.created_at|timezone:"Asia/Singapore"|date:'Y-m-d' }}
+                                </td>
+                                <td class="border-0"> 
+                                  {% load tz %}
+                                  {{ data.created_at|timezone:"Asia/Singapore"|date:'h:i A' }}
+                                </td>
+                                <td>
+                                  <select name="plan" id="plan">
+                                    <option value="Awareness Stage" selected>Awareness Stage</option>
+                                    <option value="Educate the Benifits" >Educate the Benifits </option>
+                                  </select>
+                                </td>
+                                <td>
+                                  <select name="topic" id="bot">
+                                    <option value="PA" selected>PA</option>
+                                    <option value="CPF" >CPF</option>
+                                  </select>
+                                </td>
+                                <td class="border-0" style="width:50px">
+                                  <select class="form-select tag_selected" aria-label="Default select example" style="width:120px">
+                                      {% for tag in agent_tags %}
+                                        <option {% if data.tag == tag %} selected {% endif %} value="{{data.id}}">{{tag|trim}}</option>
+                                      {%endfor%}
+                                    </select>
+                              </td>
+                                <td class="border-0" style="width:200px" rows=1 colspan=3>
+                                  <textarea class="form-control client_remarks" data-clientid = {{data.id}} style="width:200px"  id="exampleFormControlTextarea1" >{{ data.remarks }}</textarea>
+                              </td>
+
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                          <div class="pagination">
+                            <span class="step-links">
+                                {% if l_pages.has_previous %}
+                                    <a  class="btn btn-outline-info mb-4" href="?page=1">&laquo; </a>
+                                    <a class="btn btn-outline-info mb-4" href="?page={{ l_pages.previous_page_number }}"> &lt; </a>
+                                {% endif %}
+                                {% for num in l_pages.paginator.page_range %}
+                                    {% if l_pages.number == num %}
+                                        <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                                        {% elif num > l_pages.number|add:'-3' and num < l_pages.number|add:'3' %}
+                                        <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                        
+                                {% if l_pages.has_next %}
+                                    <a class="btn btn-outline-info mb-4" href="?page={{ l_pages.next_page_number }}"> &gt; </a>
+                                    <a class="btn btn-outline-info mb-4" href="?page={{ l_pages.paginator.num_pages }}"> &raquo;</a>
+                                {% endif %}
+                            </span>
+                        </div>
+                        </div>
+          
+                      </div>
+                    </div><!-- End today Leads -->
+        </div>
+      </div>
+    </div>
+  </section>

@@ -1,0 +1,67 @@
+{% extends 'layouts/base-fullscreen.html' %}
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+
+<div class="pagetitle">
+    <h1>Profile</h1>
+</div>
+
+<section class="section profile">
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+                    <!-- <img src="../assets/img/profile-img.jpg" alt="Profile" class="rounded-circle"> -->
+                    <h2>{{ request.user.get_full_name }}</h2>
+                    <h3>{{ request.user.username }}</h3>
+                    <h3>{{ request.user.email }}</h3>
+                </div>
+                </div>
+        </div>
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 style="padding: 5px 0px 0px 0px;"><strong>Profile</strong></h5>
+                    <hr style="height: 2px; background-color: rgb(0, 0, 0);">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 label "><strong>Full Name:</strong></div>
+                        <div class="col-lg-9 col-md-8">{{ request.user.get_full_name }}</div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 label"><strong>Username:</strong></div>
+                        <div class="col-lg-9 col-md-8">{{ request.user.username }}</div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 label"><strong>Email:</strong></div>
+                        <div class="col-lg-9 col-md-8">{{ request.user.email }}</div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 label"><strong> Phone Number:</strong></div>
+                        <div class="col-lg-9 col-md-8">{{ request.user.profile.phone_number }}</div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 label"><strong> Insurance Company:</strong></div>
+                        <div class="col-lg-9 col-md-8">{{ request.user.profile.insurance_company }}</div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 label"><strong>License Number:</strong> </div>
+                        <div class="col-lg-9 col-md-8">{{ request.user.profile.insurance_license_number }}</div>
+                    </div>
+                    <br>
+                    <div class="row">
+                    <div class="col-lg-3 col-md-4" > <a class="btn btn-primary" href="{% url 'updateprofile' %}"><i class="bi bi-brush"></i> Edit </a></div>
+                    <div class="col-lg-3 col-md-4"> <a class="btn btn-primary" href="{% url 'change_password' %}">Change password</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

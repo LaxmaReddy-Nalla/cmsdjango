@@ -1,0 +1,87 @@
+{% extends 'layouts/base-fullscreen.html' %}
+{% load custom_filters %}
+{% block title %} Lead-details {% endblock title %}
+
+{% block content %}
+<!-- <h1>number: {{ ldata.phone_number }}</h1> -->
+<div class="container">
+    <div class="card-details">
+        <h2 class="lead-head">Lead Details</h2>
+        <table class="table-lead">
+            <tr>
+                <th class="th-lead">Name</th>
+                <td class="td-lead">{{ data.name }}</td>
+            </tr>
+            <tr>
+                <th class="th-lead">Gender</th>
+                <td class="td-lead">{{ data.gender }}</td>
+            </tr>
+            <tr>
+                <th class="th-lead">Phone Number</th>
+                <td class="td-lead">{{data.phone_number}} <a href="tel:+{{ data.phone_number }}"><img src="/static/assets/img/icons/call.png" width="20px" height="20px" alt="Call"></a> <a href="https://api.whatsapp.com/send/?phone={{ data.phone_number }}&text&app_absent=0" target="_blank"><img src="/static/assets/img/icons/whatsapp.png" width="20px" height="20px" alt="Whatsapp"></a></td>
+            </tr>
+            <tr>
+                <th class="th-lead">Age</th>
+                <td class="td-lead">{{data.age}}</td>
+            </tr>
+            <tr>
+                <th class="th-lead">Appointment Schedule</th>
+                <td class="td-lead" class="border-0" id="date" value="{{data.id}}">
+                    <input type="datetime-local" id="client" name="appointment_scheduled" value="{% load tz %}{{data.appointment_scheduled|timezone:"Asia/Singapore"|date:'Y-m-d'}}T{{data.appointment_scheduled.time|timezone:"Asia/Singapore"|date:'H:i'}}" />
+                </td>
+            </tr>
+            <tr>
+                <th class="th-lead">Last Contacted</th>
+                <td class="td-lead">
+                    {% load tz %}
+                                  {{ data.created_at|timezone:"Asia/Singapore"|date:'Y-m-d' }}
+                </td>
+            </tr>
+            <tr>
+                <th class="th-lead">Pickup Timing</th>
+                <td class="td-lead">
+                    {% load tz %}
+                    {{ data.created_at|timezone:"Asia/Singapore"|date:'h:i A' }}
+                </td>
+            </tr>
+            <tr>
+                <th class="th-lead">Lead Qualification</th>
+                <td class="td-lead">
+                    <select name="plan" id="plan">
+                      <option value="Awareness Stage" selected>Awareness Stage</option>
+                      <option value="Educate the Benifits" >Educate the Benifits </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="th-lead">Topic</th>
+                <td class="td-lead">
+                    <select name="topic" id="bot">
+                      <option value="PA" selected>PA</option>
+                      <option value="CPF" >CPF</option>
+                    </select>
+                  </td>
+            </tr>
+            <tr>
+                <th class="th-lead">Tags</th>
+                <td class="td-lead"  style="width:50px">
+                    <select class="form-select tag_selected" aria-label="Default select example" style="width:120px">
+                        {% for tag in agent_tags %}
+                          <option {% if data.tag == tag %} selected {% endif %} value="{{data.id}}">{{tag|trim}}</option>
+                        {%endfor%}
+                      </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="th-lead">Call Back notes</th>
+                <td class="td-lead"  style="width:200px" rows=1 colspan=3>
+                    <textarea class="form-control client_remarks" data-clientid = {{data.id}} style="width:200px"  id="exampleFormControlTextarea1" >{{ data.remarks }}</textarea>
+                </td>
+            </tr>
+            
+        </table>
+
+    </div>
+</div>
+
+{% endblock content %}
